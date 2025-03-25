@@ -297,15 +297,84 @@
 
 // //update task 7 - use callback
 
+// import { useReducer, useState, useMemo, useCallback } from "react";
+// import TaskForm from "./components/TaskForm";
+// import { taskReducer } from "./taskReducer";
+// import "./App.css";
+
+// const App = () => {
+//   const [tasks, dispatch] = useReducer(taskReducer, []);
+//   const [filter, setFilter] = useState("all");
+
+//   const addTask = (title, description) => {
+//     dispatch({ type: "ADD_TASK", payload: { title, description } });
+//   };
+
+//   // 🟢 useCallback: Optimize Delete Task Function
+//   const deleteTask = useCallback((id) => {
+//     dispatch({ type: "DELETE_TASK", payload: { id } });
+//   }, []);
+
+//   // 🟢 useCallback: Optimize Toggle Task Completion Function
+//   const toggleComplete = useCallback((id) => {
+//     dispatch({ type: "TOGGLE_COMPLETE", payload: { id } });
+//   }, []);
+
+//   // 🟢 useMemo: Optimize Task Filtering
+//   const filteredTasks = useMemo(() => {
+//     console.log("Filtering tasks...");
+//     return tasks.filter((task) => {
+//       if (filter === "completed") return task.completed;
+//       if (filter === "pending") return !task.completed;
+//       return true;
+//     });
+//   }, [tasks, filter]);
+
+//   return (
+//     <div>
+//       <h1>Task Manager</h1>
+//       <TaskForm addTask={addTask} />
+
+//       {/* Task Filter Dropdown */}
+//       <label>Filter Tasks: </label>
+//       <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+//         <option value="all">All</option>
+//         <option value="completed">Completed</option>
+//         <option value="pending">Pending</option>
+//       </select>
+
+//       <ul>
+//         {filteredTasks.map((task) => (
+//           <li key={task.id}>
+//             <h3>{task.title}</h3>
+//             <p>{task.description}</p>
+//             <button onClick={() => deleteTask(task.id)}>Delete</button>
+//             <input
+//               type="checkbox"
+//               checked={task.completed}
+//               onChange={() => toggleComplete(task.id)}
+//             />
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default App;
+
+
 import { useReducer, useState, useMemo, useCallback } from "react";
-import TaskForm from "./components/TaskForm";
 import { taskReducer } from "./taskReducer";
+import TaskForm from "./components/TaskForm";
+import { ThemeProvider, ThemeContext } from "./context/ThemeContext"; // Assuming ThemeContext is created
 import "./App.css";
 
 const App = () => {
   const [tasks, dispatch] = useReducer(taskReducer, []);
   const [filter, setFilter] = useState("all");
 
+  // Add Task
   const addTask = (title, description) => {
     dispatch({ type: "ADD_TASK", payload: { title, description } });
   };
@@ -326,38 +395,58 @@ const App = () => {
     return tasks.filter((task) => {
       if (filter === "completed") return task.completed;
       if (filter === "pending") return !task.completed;
-      return true;
+      return true; // "all" case
     });
   }, [tasks, filter]);
 
   return (
-    <div>
-      <h1>Task Manager</h1>
-      <TaskForm addTask={addTask} />
+    <ThemeProvider> {/* Wrap app inside ThemeProvider */}
+      <AppContent
+        tasks={filteredTasks}
+        addTask={addTask}
+        deleteTask={deleteTask}
+        toggleComplete={toggleComplete}
+        filter={filter}
+        setFilter={setFilter}
+      />
+    </ThemeProvider>
+  );
+};
 
-      {/* Task Filter Dropdown */}
-      <label>Filter Tasks: </label>
-      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-        <option value="all">All</option>
-        <option value="completed">Completed</option>
-        <option value="pending">Pending</option>
-      </select>
+const AppContent = ({ tasks, addTask, deleteTask, toggleComplete, filter, setFilter }) => {
+  return (
+    <ThemeContext.Consumer>
+      {({ theme, toggleTheme }) => (
+        <div className={`app ${theme}`}> {/* Add dynamic class for theme */}
+          <h1>Task Manager</h1>
+          <button onClick={toggleTheme}>Toggle Dark Mode</button> {/* Dark Mode Button */}
+          <TaskForm addTask={addTask} />
+          
+          {/* Task Filter Dropdown */}
+          <label>Filter Tasks: </label>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
 
-      <ul>
-        {filteredTasks.map((task) => (
-          <li key={task.id}>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleComplete(task.id)}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+          <ul>
+            {tasks.map((task) => (
+              <li key={task.id}>
+                <h3>{task.title}</h3>
+                <p>{task.description}</p>
+                <button onClick={() => deleteTask(task.id)}>Delete</button>
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => toggleComplete(task.id)}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </ThemeContext.Consumer>
   );
 };
 
