@@ -363,44 +363,53 @@
 
 // export default App;
 
-
-import { useReducer, useState, useMemo, useCallback } from "react";
+import { useReducer, useState, useMemo, useCallback, useEffect } from "react";
 import { taskReducer } from "./taskReducer";
 import TaskForm from "./components/TaskForm";
-import { ThemeProvider, ThemeContext } from "./context/ThemeContext"; // Assuming ThemeContext is created
+import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
 import "./App.css";
 
 const App = () => {
-  const [tasks, dispatch] = useReducer(taskReducer, []);
+  // 🟡 Load tasks from localStorage initially
+  const [tasks, dispatch] = useReducer(taskReducer, [], () => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
   const [filter, setFilter] = useState("all");
 
-  // Add Task
+  // 🟢 Add Task
   const addTask = (title, description) => {
     dispatch({ type: "ADD_TASK", payload: { title, description } });
   };
 
-  // 🟢 useCallback: Optimize Delete Task Function
+  // 🟢 Delete Task
   const deleteTask = useCallback((id) => {
     dispatch({ type: "DELETE_TASK", payload: { id } });
   }, []);
 
-  // 🟢 useCallback: Optimize Toggle Task Completion Function
+  // 🟢 Toggle Complete
   const toggleComplete = useCallback((id) => {
     dispatch({ type: "TOGGLE_COMPLETE", payload: { id } });
   }, []);
 
-  // 🟢 useMemo: Optimize Task Filtering
+  // 🟢 Filtered Tasks
   const filteredTasks = useMemo(() => {
-    console.log("Filtering tasks...");
     return tasks.filter((task) => {
       if (filter === "completed") return task.completed;
       if (filter === "pending") return !task.completed;
-      return true; // "all" case
+      return true;
     });
   }, [tasks, filter]);
 
+  // 🟡 Save tasks to localStorage and alert on update
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    alert("Task list updated!");
+  }, [tasks]);
+
   return (
-    <ThemeProvider> {/* Wrap app inside ThemeProvider */}
+    <ThemeProvider>
       <AppContent
         tasks={filteredTasks}
         addTask={addTask}
@@ -417,12 +426,12 @@ const AppContent = ({ tasks, addTask, deleteTask, toggleComplete, filter, setFil
   return (
     <ThemeContext.Consumer>
       {({ theme, toggleTheme }) => (
-        <div className={`app ${theme}`}> {/* Add dynamic class for theme */}
+        <div className={`app ${theme}`}>
           <h1>Task Manager</h1>
-          <button onClick={toggleTheme}>Toggle Dark Mode</button> {/* Dark Mode Button */}
+          <button onClick={toggleTheme}>Toggle Dark Mode</button>
+
           <TaskForm addTask={addTask} />
-          
-          {/* Task Filter Dropdown */}
+
           <label>Filter Tasks: </label>
           <select value={filter} onChange={(e) => setFilter(e.target.value)}>
             <option value="all">All</option>

@@ -1,67 +1,66 @@
-/* .task-manager {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
-
-input {
-  margin: 5px;
-  padding: 10px;
-}
-
-button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin: 10px 0;
-}
-
-li span {
-  margin-right: 10px;
-} */
-
-
-/* General styling for the app */
+/* Base Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   height: 100vh;
+  background-color: #f4f4f9;
 }
 
-/* Styling the app container */
-div {
+/* Light Mode */
+body.light {
+  background-color: #f4f4f9;
+  color: #000;
+}
+
+/* Dark Mode */
+body.dark {
+  background-color: #121212;
+  color: #fff;
+}
+
+/* App Container */
+.task-manager {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   width: 100%;
+  height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Header styling */
-h1 {
+body.dark .task-manager {
+  background-color: #1e1e1e;
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+/* Header */
+.task-manager h1 {
   text-align: center;
-  color: #333;
   font-size: 2rem;
   margin-bottom: 20px;
 }
 
-/* Styling for the task list */
+body.light h1 {
+  color: #333;
+}
+
+body.dark h1 {
+  color: #fff;
+}
+
+/* Task List */
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
@@ -70,202 +69,18 @@ li {
   margin: 10px 0;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-h3 {
-  color: #333;
-  margin: 0;
-}
-
-p {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* Add a hover effect for task items */
 li:hover {
   background-color: #eaeaea;
   cursor: pointer;
 }
 
-/* Form styling */
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-/* Ensure the form and task list are centered and spaced out */
-.TaskForm {
-  margin-bottom: 30px;
-}
-
-/* General body styles */
-body {
-  font-family: Arial, sans-serif; /* Sets the font family to Arial, or sans-serif if Arial is unavailable */
-  margin: 0; /* Removes default margin */
-  padding: 0; /* Removes default padding */
-  background-color: #f4f4f9; /* Light gray background */
-  display: flex; /* Use Flexbox for layout */
-  justify-content: center; /* Center the content horizontally */
-  align-items: center; /* Center the content vertically */
-  height: 100vh; /* Ensure the body takes up the full viewport height */
-}
-
-/* Styling for the main app container */
-div {
-  background-color: #fff; /* White background for the app container */
-  padding: 20px; /* Adds padding inside the container */
-  border-radius: 10px; /* Rounded corners for the container */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the container */
-  max-width: 600px; /* Limits the container's maximum width to 600px */
-  width: 100%; /* Ensures the container takes full available width */
-}
-
-/* Header styling */
-h1 {
-  text-align: center; /* Centers the text */
-  color: #333; /* Dark gray color for the header */
-  font-size: 2rem; /* Sets the font size to 2rem */
-  margin-bottom: 20px; /* Adds space below the header */
-}
-
-/* Styling for the task list */
-ul {
-  list-style-type: none; /* Removes the default list bullet points */
-  padding: 0; /* Removes the default padding */
-}
-
-li {
-  background-color: #f9f9f9; /* Light gray background for each task */
-  padding: 15px; /* Adds padding inside each task item */
-  margin: 10px 0; /* Adds margin between task items */
-  border-radius: 8px; /* Rounded corners for task items */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to task items */
-}
-
-/* Styling for the task title (h3) */
-h3 {
-  color: #333; /* Dark gray color for task title */
-  margin: 0; /* Removes margin around the title */
-}
-
-/* Styling for the task description (p) */
-p {
-  color: #666; /* Lighter gray color for task description */
-  font-size: 0.9rem; /* Slightly smaller font size for descriptions */
-}
-
-/* Hover effect for task items */
-li:hover {
-  background-color: #eaeaea; /* Slightly darker gray when hovering */
-  cursor: pointer; /* Changes the cursor to a pointer when hovering over a task */
-}
-
-/* Styling for form inputs */
-input[type="text"] {
-  width: 100%; /* Full width for the input */
-  padding: 10px; /* Adds padding inside the input field */
-  margin: 10px 0; /* Adds margin around the input field */
-  border: 1px solid #ddd; /* Light border around the input */
-  border-radius: 5px; /* Rounded corners for the input */
-  font-size: 1rem; /* Sets the font size of the input */
-}
-
-/* Button styling */
-button {
-  width: 100%; /* Full width for the button */
-  padding: 10px; /* Adds padding inside the button */
-  background-color: #4CAF50; /* Green background color */
-  border: none; /* Removes the default border */
-  color: white; /* White text color */
-  font-size: 1.2rem; /* Font size for the button text */
-  cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
-  border-radius: 5px; /* Rounded corners for the button */
-  margin-top: 10px; /* Adds top margin for spacing */
-}
-
-/* Hover effect for the button */
-button:hover {
-  background-color: #45a049; /* Slightly darker green when hovering over the button */
-}
-
-/* Ensure the form and task list are spaced out properly */
-.TaskForm {
-  margin-bottom: 30px; /* Adds space below the form */
-}
-
-
-
-
-
-/* Default Light Mode */
-body.light {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Dark Mode */
-body.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
-
-/* Button Styling */
-button {
-  margin: 10px;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* Default Light Mode */
-body.light {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Dark Mode */
-body.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
-
-/* Dark Mode for App Container */
-body.dark div {
-  background-color: #1e1e1e;
-  color: #ffffff;
-  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
-}
-
-/* Dark Mode for Task Items */
 body.dark li {
   background-color: #333;
   color: white;
@@ -275,7 +90,124 @@ body.dark li:hover {
   background-color: #444;
 }
 
-/* Dark Mode for Buttons */
+/* Task Content */
+.task-content {
+  flex: 1;
+  padding-right: 10px;
+  min-width: 0;
+}
+
+/* Task Title */
+h3 {
+  color: #333;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+body.dark h3 {
+  color: #fff;
+}
+
+/* Task Description */
+p {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 5px 0 0;
+}
+
+body.dark p {
+  color: #ccc;
+}
+
+/* Task Controls */
+.task-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Checkbox */
+.task-controls input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #007bff;
+  margin: 0;
+}
+
+/* Delete Button */
+.task-controls .delete-btn {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-controls .delete-btn:hover {
+  background-color: #ff1a1a;
+}
+
+/* Dark mode delete button */
+body.dark .task-controls .delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+body.dark .task-controls .delete-btn:hover {
+  background-color: #ff1a1a;
+}
+
+/* Form */
+.TaskForm {
+  margin-bottom: 30px;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+}
+
+body.dark input[type="text"],
+body.dark textarea,
+body.dark select {
+  background-color: #2c2c2c;
+  color: white;
+  border: 1px solid #555;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
 body.dark button {
   background-color: #007bff;
   color: white;
@@ -285,15 +217,7 @@ body.dark button:hover {
   background-color: #0056b3;
 }
 
-
-
-
-/* Default Light Mode */
-body.light h1 {
-  color: #333; /* Dark text */
-}
-
-/* Dark Mode */
-body.dark h1 {
-  color: #ffffff; /* White text */
+/* Labels */
+label {
+  font-weight: bold;
 }
